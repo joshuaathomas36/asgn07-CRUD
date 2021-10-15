@@ -54,6 +54,24 @@ class Bicycle {
     return $object;
   }
 
+  public function create() {
+    $sql = "INSERT INTO bicycles (";
+    $sql .= "brand, model, year, category, color, gender, price, weight_kg, condition_id, description";
+    $sql .= ") VALUES (";
+    $sql .= "'" . $this->brand . "', ";
+    $sql .= "'" . $this->model . "', ";
+    $sql .= "'" . $this->year . "', ";
+    $sql .= "'" . $this->category . "', ";
+    $sql .= "'" . $this->color . "', ";
+    $sql .= "'" . $this->gender . "', ";
+    $sql .= "'" . $this->price . "', ";
+    $sql .= "'" . $this->weight_kg . "', ";
+    $sql .= "'" . $this->condition_id . "', ";
+    $sql .= "'" . $this->description . "'";
+    $sql .= ")";
+    $result = self::$database->query($sql);
+    return $result;
+  }
   // ----- END OF ACTIVE RECORD CODE ------
 
   public $id;
