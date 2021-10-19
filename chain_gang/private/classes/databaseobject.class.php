@@ -7,10 +7,22 @@ class DatabaseObject {
   static protected $columns = [];
   public $errors = [];
 
+  /**
+   * The set_database method sets the database
+   *
+   * @param   [String]  $database  The database that is being used
+   */
   static public function set_database($database) {
     self::$database = $database;
   }
 
+  /**
+   * The find_by_sql method find the table from this database and turns it into a array and then returns the array
+   *
+   * @param   [String]  $sql  The table being targeted
+   *
+   * @return  [Array]        Returns the array
+   */
   static public function find_by_sql($sql) {
     $result = self::$database->query($sql);
     if(!$result) {
@@ -28,11 +40,23 @@ class DatabaseObject {
     return $object_array;
   }
 
+  /**
+   * The find_all method grabs everything in the table
+   *
+   * @return  [Array]  Returns the array
+   */
   static public function find_all() {
     $sql = "SELECT * FROM " . static::$table_name;
     return static::find_by_sql($sql);
   }
 
+  /**
+   * The find_by_id method finds data based on the id
+   *
+   * @param   [String]  $id  The id being targeted
+   *
+   * @return  [array]       Returns the array or a false
+   */
   static public function find_by_id($id) {
     $sql = "SELECT * FROM " . static::$table_name . " ";
     $sql .= "WHERE id='" . self::$database->escape_string($id) . "'";
@@ -44,6 +68,13 @@ class DatabaseObject {
     }
   }
 
+  /**
+   * The instantiate method creates a object base on the record given
+   *
+   * @param   [String]  $record  The record being given
+   *
+   * @return  [Array]           Returns the array it created
+   */
   static protected function instantiate($record) {
     $object = new static;
     // Could manually assign values to properties
@@ -56,6 +87,11 @@ class DatabaseObject {
     return $object;
   }
 
+  /**
+   * The validate method is supposed to validate an array
+   *
+   * @return  [String]  Returns the code that is supposed to be vilidated
+   */
   protected function validate() {
     $this->errors = [];
 
@@ -81,6 +117,11 @@ class DatabaseObject {
     return $result;
   }
 
+  /**
+   * The update method updates the lists of items given
+   *
+   * @return  [array]  A array being returned
+   */
   protected function update() {
     $this->validate();
     if(!empty($this->errors)) { return false; }
@@ -99,6 +140,11 @@ class DatabaseObject {
     return $result;
   }
 
+  /**
+   * The save method checks whether you are updating or creating a new recorder and responding accordingly by given the correct method
+   *
+   * @return  [method]  Returns the correct method
+   */
   public function save() {
     // A new record will not have an ID yet
     if(isset($this->id)) {
@@ -108,6 +154,11 @@ class DatabaseObject {
     }
   }
 
+  /**
+   * The merge_attributes method merges attributes
+   *
+   * @param   [Array]  $args  The array being merged
+   */
   public function merge_attributes($args=[]) {
     foreach($args as $key => $value) {
       if(property_exists($this, $key) && !is_null($value)) {
@@ -117,6 +168,11 @@ class DatabaseObject {
   }
 
   // Properties which have database columns, excluding ID
+  /**
+   * The attributes method creates all attributes except the id
+   *
+   * @return  [Array]  Returns the array of attributes
+   */
   public function attributes() {
     $attributes = [];
     foreach(static::$db_columns as $column) {
@@ -126,6 +182,11 @@ class DatabaseObject {
     return $attributes;
   }
 
+  /**
+   * The sanitized_attributes method sanitizes the attributes
+   *
+   * @return  [Array]  Returns the sanitized attributes
+   */
   protected function sanitized_attributes() {
     $sanitized = [];
     foreach($this->attributes() as $key => $value) {
@@ -134,6 +195,11 @@ class DatabaseObject {
     return $sanitized;
   }
 
+  /**
+   * The delete method deletes an array of items from the table
+   *
+   * @return  [Query]  Returns the result
+   */
   public function delete() {
     $sql = "DELETE FROM " . static::$table_name . " ";
     $sql .= "WHERE id='" . self::$database->escape_string($this->id) . "' ";

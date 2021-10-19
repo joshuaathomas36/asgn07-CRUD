@@ -78,6 +78,11 @@ class Bicycle extends DatabaseObject {
     }
   }
 
+  /**
+   * The validate method checks whether the brand or model are blank and if so, it  returns an error mesage.
+   *
+   * @return  [String]  Returns the error mesage.
+   */
   protected function validate() {
     $this->errors = [];
 
