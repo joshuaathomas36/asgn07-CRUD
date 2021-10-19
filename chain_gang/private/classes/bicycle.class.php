@@ -87,10 +87,10 @@ class Bicycle extends DatabaseObject {
     $this->errors = [];
 
     if(is_blank($this->brand)) {
-      $this->errors[] = "Brand cannot be blank.";
+      $this->errors[0] = "Brand cannot be blank.";
     }
     if(is_blank($this->model)) {
-      $this->errors[] = "Model cannot be blank.";
+      $this->errors[1] = "Model cannot be blank.";
     }
     return $this->errors;
   }

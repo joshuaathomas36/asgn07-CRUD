@@ -5,9 +5,15 @@
 // 2. Unique credentials on development and production servers
 // 3. Unique credentials if working with multiple developers
 
+// Development
 define("DB_SERVER", "localhost");
-define("DB_USER", "webuser");
-define("DB_PASS", "secretpassword");
+define("DB_USER", "chain_gang");
+define("DB_PASS", "");
 define("DB_NAME", "chain_gang");
 
+// The Host
+// define("DB_SERVER", "mi3-ss64.a2hosting.com");
+// define("DB_USER", "joshuaat_birdQueris");
+// define("DB_PASS", "birdQueris");
+// define("DB_NAME", "joshuaat_birdQueris");
 ?>

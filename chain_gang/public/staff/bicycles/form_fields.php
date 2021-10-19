@@ -8,12 +8,12 @@ if(!isset($bicycle)) {
 
 <dl>
   <dt>Brand</dt>
-  <dd><input type="text" name="bicycle[brand]" value="<?php echo h($bicycle->brand); ?>" /></dd>
+  <dd><input type="text" name="bicycle[brand]" value="<?php echo h($bicycle->brand); ?>" /> <?php echo $bicycle->errors[0] ?? ''; ?></dd>
 </dl>
 
 <dl>
   <dt>Model</dt>
-  <dd><input type="text" name="bicycle[model]" value="<?php echo h($bicycle->model); ?>" /></dd>
+  <dd><input type="text" name="bicycle[model]" value="<?php echo h($bicycle->model); ?>"/> <?php echo $bicycle->errors[1] ?? ''; ?> </dd>
 </dl>
 
 <dl>
