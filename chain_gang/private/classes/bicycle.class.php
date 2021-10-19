@@ -4,6 +4,7 @@ class Bicycle {
 
   // ----- START OF ACTIVE RECORD CODE ------
   static protected $database;
+  static protected $db_columns = ['id', 'brand', 'model', 'year', 'category', 'color', 'gender', 'price', 'weight_kg', 'condition_id', 'description'];
 
   static public function set_database($database) {
     self::$database = $database;
@@ -55,22 +56,35 @@ class Bicycle {
   }
 
   public function create() {
+    $attributes = $this->sanitized_attributes();
     $sql = "INSERT INTO bicycles (";
-    $sql .= "brand, model, year, category, color, gender, price, weight_kg, condition_id, description";
-    $sql .= ") VALUES (";
-    $sql .= "'" . $this->brand . "', ";
-    $sql .= "'" . $this->model . "', ";
-    $sql .= "'" . $this->year . "', ";
-    $sql .= "'" . $this->category . "', ";
-    $sql .= "'" . $this->color . "', ";
-    $sql .= "'" . $this->gender . "', ";
-    $sql .= "'" . $this->price . "', ";
-    $sql .= "'" . $this->weight_kg . "', ";
-    $sql .= "'" . $this->condition_id . "', ";
-    $sql .= "'" . $this->description . "'";
-    $sql .= ")";
+    $sql .= join(', ', array_keys($attributes));
+    $sql .= ") VALUES ('";
+    $sql .= join("', '", array_values($attributes));
+    $sql .= "')";
     $result = self::$database->query($sql);
+    if($result) {
+      $this->id = self::$database->insert_id;
+    }
     return $result;
+  }
+
+  // Properties which have database columns, excluding ID
+  public function attributes() {
+    $attributes = [];
+    foreach(self::$db_columns as $column) {
+      if($column == 'id') { continue; }
+      $attributes[$column] = $this->$column;
+    }
+    return $attributes
+  }
+
+  protected function sanitized_attributes() {
+    $sanitized = [];
+    foreach($this->attributes() as $key => $value) {
+      $sanitized[$key] = self::$database->escape_string($value);
+    }
+    return $sanitized;
   }
   // ----- END OF ACTIVE RECORD CODE ------
 
